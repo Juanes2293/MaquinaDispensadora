@@ -67,11 +67,7 @@ namespace Control
             return total_billetes;
         }
 
-        public int cashback_algorithm(Consumable product)
-        {
-            return 0;
-        }
-
+        
     }
 
 }

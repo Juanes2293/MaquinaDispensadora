@@ -70,22 +70,88 @@ namespace View
                     {
                         break;
                     }
+
                 }
 
-                Console.WriteLine("La devuelta es: " + controller.cashback_algorithm(producto_escogido));
+                int devuelta = 0;
+                int precio_producto = producto_escogido.Price;
+                int total_pagado = controller.enqueue_cash();
+                if (total_pagado >= precio_producto)
+                {
+                    devuelta = total_pagado - precio_producto;
+                }
+                else
+                {
+                    Console.WriteLine("El monto ingresado es menor al precio del producto seleccionado");
+                }
+                Console.WriteLine("La devuelta es: " + devuelta);
 
             }
             else if (input_cliente == "P")
             {
+                Console.WriteLine("Los productos existentes en este momento son: ");
+
+                foreach(Consumable producto in controller.Product_List)
+                {
+                    Console.WriteLine(producto.ToString);
+                }
+
+
                 Console.WriteLine("Seleccione que producto desea surtir");
 
-                string input_seleccion = Console.ReadLine();
+                string product_name = Console.ReadLine();
+
+                Console.WriteLine("Ingrese el precio del producto:");
+
+                string product_price_input = Console.ReadLine();
+
+                if (int.TryParse(product_price_input, out int product_price))
+                {
+                    Console.WriteLine("Ingrese la cantidad a llenar:");
+                    string product_quantity_input = Console.ReadLine();
+                    if (int.TryParse(product_quantity_input, out int product_quantity))
+                    {
+                        Model.Consumable product = new Model.Consumable(product_name, product_price, product_quantity);
+                        controller.AddProduct(product);
+                        Console.WriteLine("Producto agregado exitosamente");
+
+                        Console.WriteLine("Lista actualizada de productos:");
+
+                        foreach (Model.Consumable producto in controller.Product_List)
+                        {
+                            Console.WriteLine(producto.ToString());
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Ingrese una cantidad válida");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Ingrese un precio válido");
+                }
 
 
-                // Ingresar cantidad de producto a surtir ....
             }
 
 
+        }
+
+        static int GetTotalAmountPaid(Queue<int> billetes)
+        {
+            int totalAmountPaid = 0;
+            while (billetes.Count > 0)
+            {
+                totalAmountPaid += billetes.Dequeue();
+            }
+            return totalAmountPaid;
+        }
+
+        static int GetCoinCount(int change, int coinValue)
+        {
+            int coinCount = change / coinValue;
+            return coinCount;
         }
     }
 }

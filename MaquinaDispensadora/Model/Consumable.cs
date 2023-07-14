@@ -23,8 +23,8 @@ namespace Model
 
         override public string ToString()
         {
-            Func<string, string> upperCase = texto => texto.ToUpper();
-            return upperCase(Name + ": " + Price + ", Cantidad: " + Quantity);
+            
+            return (Name + ": " + Price + ", Cantidad: " + Quantity);
         }
 
     }
